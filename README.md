@@ -1,3 +1,3 @@
 # cue_splitter
 
-Split cue files
+Split cue files to flac using ffmpeg.
