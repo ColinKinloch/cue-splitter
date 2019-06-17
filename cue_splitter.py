@@ -126,11 +126,13 @@ def main(argv=[]):
       
       tracks.append(track)
   
-  ordered_tracks = deque(sorted(tracks,
-    key = lambda t: t['start_time']))
+  # Order by start time
+  time_ordered_tracks = deque(reversed(sorted(tracks,
+    key = lambda t: t['start_time'])))
   
+  # Calculate track end times by previous track pregap time
   end_time = None
-  for track in reversed(ordered_tracks):
+  for track in time_ordered_tracks:
     start_time = track.get('start_time')
     pregap_time = track.get('pregap_time', start_time)
     track['end_time'] = end_time
