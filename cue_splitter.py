@@ -163,7 +163,7 @@ def main(argv=[]):
         '-ss', str(track['start_time']),
         '-i', str(file['path']),
         # TODO: argparse codec default='flac'
-        '-c:a', encoding,
+        #'-c:a', encoding,
       ]
       + (['-t', str(track['duration'])] if 'duration' in track else [])
       + meta_args
