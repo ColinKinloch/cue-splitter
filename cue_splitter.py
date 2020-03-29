@@ -75,15 +75,16 @@ def parse_time(time):
 def main(argv=[]):
   parser = argparse.ArgumentParser()
   parser.add_argument('cue_file', help='Path to cue file to split')
-  parser.add_argument('-E', '--encoding', default='UTF8', help='The text encoding of the CUE file')
+  parser.add_argument('-E', '--cue-encoding', default='UTF8', help='The text encoding of the CUE file')
   parser.add_argument('-n', '--dry-run', help='Print ffmpeg commands', action='store_true')
   parser.add_argument('-o', '--output-path', type=Path, default='.', help='Path to output to')
+  parser.add_argument('-e', '--output-encoding', default='flac', help='Output file encoding')
   args = parser.parse_args(argv)
   
   cue_file = Path(args.cue_file).resolve()
   cue_dir = cue_file.parent
   
-  cue_data = deque([l.rstrip() for l in open(cue_file, encoding=args.encoding)])
+  cue_data = deque([l.rstrip() for l in open(cue_file, encoding=args.cue_encoding)])
   cue = simple_parse(cue_data)
   
   metadata = {}
@@ -116,7 +117,10 @@ def main(argv=[]):
       track['id'] = int(t[''][0])
       metadata['track'] = f"{track['id']}/{file['track_count']}"
       metadata['title'] = t['TITLE'][0][''][0]
-      metadata['author'] = t['PERFORMER'][0][''][0]
+      try:
+        metadata['author'] = t['PERFORMER'][0][''][0]
+      except KeyError:
+        pass
       
       for index in t['INDEX']:
         if int(index[''][0]) == int('01'):
@@ -148,18 +152,23 @@ def main(argv=[]):
   for track in file['tracks']:
     track_meta_args = [f'{k.upper()}={v}' for (k, v) in track['metadata'].items()]
     meta_args = list(itertools.chain.from_iterable([['-metadata', v] for v in file_meta_args + track_meta_args]))
+    try:
+      file_author = track['metadata']['author']
+    except KeyError:
+      file_author = file['metadata']['album_artist']
+    encoding = args.output_encoding
     
     command = (ffmpeg
       + [
         '-ss', str(track['start_time']),
         '-i', str(file['path']),
         # TODO: argparse codec default='flac'
-        '-c:a', 'flac',
+        '-c:a', encoding,
       ]
       + (['-t', str(track['duration'])] if 'duration' in track else [])
       + meta_args
       + [ str(args.output_path.resolve() /
-        f"{track['id']:0{track_padding}d} - {track['metadata']['author']} - {track['metadata']['title']}{file['path'].suffix}") ])
+        f"{track['id']:0{track_padding}d} - {file_author} - {track['metadata']['title']}.{encoding}") ])
     
     print(' '.join(command))
     if not args.dry_run:
