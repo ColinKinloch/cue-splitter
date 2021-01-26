@@ -4,6 +4,7 @@ from collections import deque
 from pathlib import Path
 
 import sys
+import os
 import argparse
 import shlex
 import datetime
@@ -157,6 +158,9 @@ def main(argv=[]):
       file_author = track['metadata']['author']
     except KeyError:
       file_author = file['metadata']['album_artist']
+    track_title = track['metadata']['title']
+    out_filename = f"{track['id']:0{track_padding}d} - {file_author} - {track['metadata']['title']}.{encoding}"
+    out_filename = out_filename.replace(os.sep, '')
     encoding = args.output_encoding
     
     command = (ffmpeg
@@ -169,7 +173,7 @@ def main(argv=[]):
       + (['-t', str(track['duration'])] if 'duration' in track else [])
       + meta_args
       + [ str(args.output_path.resolve() /
-        f"{track['id']:0{track_padding}d} - {file_author} - {track['metadata']['title']}.{encoding}") ])
+        out_filename) ])
     
     print(' '.join(command))
     if not args.dry_run:
