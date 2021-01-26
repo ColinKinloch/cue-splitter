@@ -159,9 +159,9 @@ def main(argv=[]):
     except KeyError:
       file_author = file['metadata']['album_artist']
     track_title = track['metadata']['title']
+    encoding = args.output_encoding
     out_filename = f"{track['id']:0{track_padding}d} - {file_author} - {track['metadata']['title']}.{encoding}"
     out_filename = out_filename.replace(os.sep, '')
-    encoding = args.output_encoding
     
     command = (ffmpeg
       + [
