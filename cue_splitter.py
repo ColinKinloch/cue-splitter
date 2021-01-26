@@ -96,7 +96,8 @@ def main(argv=[]):
   
   file['path'] = cue_dir / cue['FILE'][0][''][0]
   metadata['album'] = cue['TITLE'][0][''][0]
-  metadata['album_artist'] = cue['PERFORMER'][0][''][0]
+  if 'PERFORMER' in cue:
+    metadata['album_artist'] = cue['PERFORMER'][0][''][0]
   
   for r in cue['REM']:
     [field, *rem_args] = r['']
