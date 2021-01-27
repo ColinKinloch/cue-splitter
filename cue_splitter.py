@@ -186,6 +186,7 @@ def main(argv=[]):
         '-i', str(file['path']),
         # TODO: argparse codec default='flac'
         #'-c:a', encoding,
+        '-vn', # ffmpeg interprets album art as video
       ]
       + (['-t', str(track['duration'])] if 'duration' in track else [])
       + meta_args
