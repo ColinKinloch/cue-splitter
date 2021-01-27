@@ -126,7 +126,7 @@ def main(argv=[]):
       metadata['track'] = f"{track['id']}/{file['track_count']}"
       metadata['title'] = t['TITLE'][0][''][0]
       if 'PERFORMER' in t:
-        metadata['author'] = t['PERFORMER'][0][''][0]
+        metadata['artist'] = t['PERFORMER'][0][''][0]
       if 'SONGWRITER' in t:
         metadata['composer'] = t['SONGWRITER'][0][''][0]
       if 'REPLAYGAIN_TRACK_GAIN' in t:
