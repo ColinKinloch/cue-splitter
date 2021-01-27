@@ -99,6 +99,12 @@ def main(argv=[]):
   metadata['album'] = cue['TITLE'][0][''][0]
   if 'PERFORMER' in cue:
     metadata['album_artist'] = cue['PERFORMER'][0][''][0]
+  if 'SONGWRITER' in cue:
+    metadata['composer'] = cue['SONGWRITER'][0][''][0]
+  if 'REPLAYGAIN_ALBUM_GAIN' in cue:
+    metadata['REPLAYGAIN_ALBUM_GAIN'] = cue['REPLAYGAIN_ALBUM_GAIN'][0][''][0]
+  if 'REPLAYGAIN_ALBUM_PEAK' in cue:
+    metadata['REPLAYGAIN_ALBUM_PEAK'] = cue['REPLAYGAIN_ALBUM_PEAK'][0][''][0]
   
   for r in cue['REM']:
     [field, *rem_args] = r['']
@@ -119,10 +125,14 @@ def main(argv=[]):
       track['id'] = int(t[''][0])
       metadata['track'] = f"{track['id']}/{file['track_count']}"
       metadata['title'] = t['TITLE'][0][''][0]
-      try:
+      if 'PERFORMER' in t:
         metadata['author'] = t['PERFORMER'][0][''][0]
-      except KeyError:
-        pass
+      if 'SONGWRITER' in cue:
+        metadata['composer'] = cue['SONGWRITER'][0][''][0]
+      if 'REPLAYGAIN_TRACK_GAIN' in t:
+        metadata['REPLAYGAIN_TRACK_GAIN'] = t['REPLAYGAIN_TRACK_GAIN'][0][''][0]
+      if 'REPLAYGAIN_TRACK_PEAK' in t:
+        metadata['REPLAYGAIN_TRACK_PEAK'] = t['REPLAYGAIN_TRACK_PEAK'][0][''][0]
       
       for index in t['INDEX']:
         if int(index[''][0]) == int('01'):
