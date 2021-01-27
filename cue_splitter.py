@@ -127,8 +127,8 @@ def main(argv=[]):
       metadata['title'] = t['TITLE'][0][''][0]
       if 'PERFORMER' in t:
         metadata['author'] = t['PERFORMER'][0][''][0]
-      if 'SONGWRITER' in cue:
-        metadata['composer'] = cue['SONGWRITER'][0][''][0]
+      if 'SONGWRITER' in t:
+        metadata['composer'] = t['SONGWRITER'][0][''][0]
       if 'REPLAYGAIN_TRACK_GAIN' in t:
         metadata['replaygain_track_gain'] = t['REPLAYGAIN_TRACK_GAIN'][0][''][0]
       if 'REPLAYGAIN_TRACK_PEAK' in t:
