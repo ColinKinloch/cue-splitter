@@ -102,20 +102,21 @@ def main(argv=[]):
   if 'SONGWRITER' in cue:
     metadata['composer'] = cue['SONGWRITER'][0][''][0]
   
-  for r in cue['REM']:
-    [field, *rem_args] = r['']
-    if field == 'GENRE':
-      metadata['genre'] = rem_args[0]
-    elif field == 'DATE':
-      metadata['DATE'] = rem_args[0]
-    elif field == 'DISKID':
-      pass
-    elif field == 'COMMENT':
-      pass
-    elif field == 'REPLAYGAIN_ALBUM_GAIN':
-      metadata['replaygain_album_gain'] = ' '.join(rem_args)
-    elif field == 'REPLAYGAIN_ALBUM_PEAK':
-      metadata['replaygain_album_peak'] = ' '.join(rem_args)
+  if 'REM' in cue:
+    for r in cue['REM']:
+      [field, *rem_args] = r['']
+      if field == 'GENRE':
+        metadata['genre'] = rem_args[0]
+      elif field == 'DATE':
+        metadata['DATE'] = rem_args[0]
+      elif field == 'DISKID':
+        pass
+      elif field == 'COMMENT':
+        pass
+      elif field == 'REPLAYGAIN_ALBUM_GAIN':
+        metadata['replaygain_album_gain'] = ' '.join(rem_args)
+      elif field == 'REPLAYGAIN_ALBUM_PEAK':
+        metadata['replaygain_album_peak'] = ' '.join(rem_args)
   
   
   for f in cue['FILE']:
@@ -134,12 +135,13 @@ def main(argv=[]):
       if 'REPLAYGAIN_TRACK_PEAK' in t:
         metadata['replaygain_track_peak'] = t['REPLAYGAIN_TRACK_PEAK'][0][''][0]
       
-      for r in t['REM']:
-        [field, *rem_args] = r['']
-        if field == 'REPLAYGAIN_TRACK_GAIN':
-          metadata['replaygain_track_gain'] = ' '.join(rem_args)
-        elif field == 'REPLAYGAIN_TRACK_PEAK':
-          metadata['replaygain_track_peak'] = ' '.join(rem_args)
+      if 'REM' in t:
+        for r in t['REM']:
+          [field, *rem_args] = r['']
+          if field == 'REPLAYGAIN_TRACK_GAIN':
+            metadata['replaygain_track_gain'] = ' '.join(rem_args)
+          elif field == 'REPLAYGAIN_TRACK_PEAK':
+            metadata['replaygain_track_peak'] = ' '.join(rem_args)
       
       for index in t['INDEX']:
         if int(index[''][0]) == int('01'):
