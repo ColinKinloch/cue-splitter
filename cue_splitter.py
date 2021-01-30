@@ -20,14 +20,14 @@ def pop_line(lines):
   return (line, c, indent)
 
 # Parse indentation tree
-# 
+#
 # input:
 # FILE "x.wav" WAVE
 #   TRACK 01 AUDIO
 #   TRACK 02 AUDIO
 # FILE "y.wav" WAVE
 #   TRACK 03 AUDIO
-# 
+#
 # output:
 # {
 #   'FILE': [
@@ -75,11 +75,16 @@ def parse_time(time):
 
 def main(argv=[]):
   parser = argparse.ArgumentParser()
-  parser.add_argument('cue_file', help='Path to cue file to split')
-  parser.add_argument('-E', '--cue-encoding', default='UTF8', help='The text encoding of the CUE file')
-  parser.add_argument('-n', '--dry-run', help='Print ffmpeg commands', action='store_true')
-  parser.add_argument('-o', '--output-path', type=Path, default='.', help='Path to output to')
-  parser.add_argument('-e', '--output-encoding', default='flac', help='Output file encoding')
+  parser.add_argument('cue_file',
+    help='Path to cue file to split')
+  parser.add_argument('-E', '--cue-encoding', default='UTF8',
+    help='The text encoding of the CUE file')
+  parser.add_argument('-n', '--dry-run', action='store_true',
+    help='Print ffmpeg commands')
+  parser.add_argument('-o', '--output-path', type=Path, default='.',
+    help='Path to output to')
+  parser.add_argument('-e', '--output-encoding', default='flac',
+    help='Output file encoding')
   args = parser.parse_args(argv)
   
   cue_file = Path(args.cue_file).resolve()
