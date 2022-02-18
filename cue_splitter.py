@@ -175,6 +175,8 @@ def main(argv=[]):
   file_meta_args = [f'{k.upper()}={v}' for (k, v) in file['metadata'].items()]
   track_padding = math.ceil(math.log10(len(file['tracks'])))
   
+  args.output_path.resolve().mkdir(exist_ok=True)
+  
   for track in file['tracks']:
     track_meta_args = [f'{k.upper()}={v}' for (k, v) in track['metadata'].items()]
     meta_args = list(itertools.chain.from_iterable([['-metadata', v] for v in file_meta_args + track_meta_args]))
